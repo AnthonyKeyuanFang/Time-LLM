@@ -126,7 +126,7 @@ class Model(nn.Module):
                     '/kaggle/input/mybert',
                     trust_remote_code=True,
                     local_files_only=True,
-                    config=self.bert_config,
+                    config=self.bert_config,torch_dtype=torch.float32,
                 )
             except EnvironmentError:  # downloads model from HF is not already done
                 print("Local model files not found. Attempting to download...")
@@ -134,7 +134,7 @@ class Model(nn.Module):
                     '/kaggle/input/mybert',
                     trust_remote_code=True,
                     local_files_only=False,
-                    config=self.bert_config,
+                    config=self.bert_config,torch_dtype=torch.float32,
                 )
 
             try:

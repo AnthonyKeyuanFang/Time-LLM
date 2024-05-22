@@ -116,14 +116,14 @@ class Model(nn.Module):
                     local_files_only=False
                 )
         elif configs.llm_model == 'BERT':
-            self.bert_config = BertConfig.from_pretrained('google-bert/bert-base-uncased')
+            self.bert_config = BertConfig.from_pretrained('/kaggle/input/mybert')
 
             self.bert_config.num_hidden_layers = configs.llm_layers
             self.bert_config.output_attentions = True
             self.bert_config.output_hidden_states = True
             try:
                 self.llm_model = BertModel.from_pretrained(
-                    'google-bert/bert-base-uncased',
+                    '/kaggle/input/mybert',
                     trust_remote_code=True,
                     local_files_only=True,
                     config=self.bert_config,
@@ -131,7 +131,7 @@ class Model(nn.Module):
             except EnvironmentError:  # downloads model from HF is not already done
                 print("Local model files not found. Attempting to download...")
                 self.llm_model = BertModel.from_pretrained(
-                    'google-bert/bert-base-uncased',
+                    '/kaggle/input/mybert',
                     trust_remote_code=True,
                     local_files_only=False,
                     config=self.bert_config,
@@ -139,14 +139,14 @@ class Model(nn.Module):
 
             try:
                 self.tokenizer = BertTokenizer.from_pretrained(
-                    'google-bert/bert-base-uncased',
+                    '/kaggle/input/mybert',
                     trust_remote_code=True,
                     local_files_only=True
                 )
             except EnvironmentError:  # downloads the tokenizer from HF if not already done
                 print("Local tokenizer files not found. Atempting to download them..")
                 self.tokenizer = BertTokenizer.from_pretrained(
-                    'google-bert/bert-base-uncased',
+                    '/kaggle/input/mybert',
                     trust_remote_code=True,
                     local_files_only=False
                 )

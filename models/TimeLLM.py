@@ -206,7 +206,10 @@ class Model(nn.Module):
 
         min_values = torch.min(x_enc, dim=1)[0]
         max_values = torch.max(x_enc, dim=1)[0]
-        medians = torch.median(x_enc, dim=1).values
+        print(max_values.shape)
+        #medians = torch.median(x_enc, dim=1).values
+        medians = torch.quantile(x_enc, 0.5, dim=1)
+        print(medians.shape)
         lags = self.calcute_lags(x_enc)
         trends = x_enc.diff(dim=1).sum(dim=1)
 

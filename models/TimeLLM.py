@@ -199,7 +199,7 @@ class Model(nn.Module):
 
     def median_to_bfloat16(self,x_enc):
         # 将PyTorch张量转换为NumPy数组，并展平第二个维度
-        x_enc_np = x_enc.numpy()
+        x_enc_np = x_enc.to('cpu').numpy()
         
         # 将NumPy数组转换为pandas DataFrame
         df = pd.DataFrame(x_enc_np)

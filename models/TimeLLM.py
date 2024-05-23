@@ -1,5 +1,5 @@
 from math import sqrt
-
+import pandas as pd
 import torch
 import torch.nn as nn
 
@@ -197,6 +197,23 @@ class Model(nn.Module):
             return dec_out[:, -self.pred_len:, :]
         return None
 
+    def median_to_bfloat16(self,x_enc):
+        # 将PyTorch张量转换为NumPy数组，并展平第二个维度
+        x_enc_np = x_enc.numpy()
+        
+        # 将NumPy数组转换为pandas DataFrame
+        df = pd.DataFrame(x_enc_np)
+        
+        # 计算每个批次的中位数
+        medians_series = df.apply(lambda x: x.median(), axis=1)
+        
+        # 将中位数结果转换为NumPy数组，并重塑为[32, 1]
+        medians_np = medians_series.values.reshape(-1, 1)
+        
+        # 将NumPy数组转换为PyTorch张量，并确保数据类型为bfloat16
+        medians_tensor = torch.tensor(medians_np, dtype=torch.bfloat16)
+    return medians_tensor
+
     def forecast(self, x_enc, x_mark_enc, x_dec, x_mark_dec):
 
         x_enc = self.normalize_layers(x_enc, 'norm')
@@ -206,10 +223,8 @@ class Model(nn.Module):
 
         min_values = torch.min(x_enc, dim=1)[0]
         max_values = torch.max(x_enc, dim=1)[0]
-        print(max_values.shape)
         #medians = torch.median(x_enc, dim=1).values
-        medians = torch.quantile(x_enc, 0.5, dim=1)
-        print(medians.shape)
+        medians = self.median_to_bfloat16(x_enc).to('cuda')
         lags = self.calcute_lags(x_enc)
         trends = x_enc.diff(dim=1).sum(dim=1)
 

@@ -212,7 +212,7 @@ class Model(nn.Module):
         
         # 将NumPy数组转换为PyTorch张量，并确保数据类型为bfloat16
         medians_tensor = torch.tensor(medians_np, dtype=torch.bfloat16)
-    return medians_tensor
+        return medians_tensor
 
     def forecast(self, x_enc, x_mark_enc, x_dec, x_mark_dec):
 

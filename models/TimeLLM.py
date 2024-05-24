@@ -305,6 +305,10 @@ class ReprogrammingLayer(nn.Module):
         B, L, _ = target_embedding.shape
         S, _ = source_embedding.shape
         H = self.n_heads
+        print('target_embedding')
+        print(target_embedding.shape)
+        print('source_embedding')
+        print(source_embedding.shape)
         print('BLHS')
         print(B,L,H,S)
         target_embedding = self.query_projection(target_embedding).view(B, L, H, -1)

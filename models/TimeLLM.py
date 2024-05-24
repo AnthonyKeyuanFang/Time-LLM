@@ -200,9 +200,9 @@ class Model(nn.Module):
     def median_to_bfloat16(self,x_enc):
         # 将PyTorch张量转换为NumPy数组，并展平第二个维度
         x_enc_np = x_enc.float().to('cpu').numpy()
-        
+        s1,s2,s3 = x_enc_np.shape
         # 将NumPy数组转换为pandas DataFrame
-        df = pd.DataFrame(x_enc_np)
+        df = pd.DataFrame(x_enc_np.reshape(s1,s2))
         
         # 计算每个批次的中位数
         medians_series = df.apply(lambda x: x.median(), axis=1)

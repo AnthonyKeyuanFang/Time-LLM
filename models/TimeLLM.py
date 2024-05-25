@@ -281,7 +281,6 @@ class Model(nn.Module):
         corr = torch.fft.irfft(res, dim=-1)
         mean_value = torch.mean(corr, dim=1)
         _, lags = torch.topk(mean_value, self.top_k, dim=-1)
-        print(lags)
         return lags.to(torch.bfloat16)
 
 

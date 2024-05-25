@@ -257,10 +257,7 @@ class Model(nn.Module):
         x_enc = x_enc.permute(0, 2, 1).contiguous()
         #enc_out, n_vars = self.patch_embedding(x_enc.to(torch.bfloat16))
         enc_out, n_vars = self.patch_embedding(x_enc.float())
-        print('enc_out')
-        print(enc_out.shape)
-        print('source_embeddings')
-        print(source_embeddings.shape)
+
         enc_out = self.reprogramming_layer(enc_out, source_embeddings, source_embeddings)
         llama_enc_out = torch.cat([prompt_embeddings, enc_out], dim=1)
         dec_out = self.llm_model(inputs_embeds=llama_enc_out).last_hidden_state
@@ -293,10 +290,7 @@ class ReprogrammingLayer(nn.Module):
         super(ReprogrammingLayer, self).__init__()
 
         d_keys = d_keys or (d_model // n_heads)
-        print('d_llm')
-        print(d_llm)
-        print('d_keys * n_heads')
-        print(d_keys * n_heads)
+
         self.query_projection = nn.Linear(d_model, d_keys * n_heads)
         self.key_projection = nn.Linear(d_llm, d_keys * n_heads)
         self.value_projection = nn.Linear(d_llm, d_keys * n_heads)
@@ -308,12 +302,7 @@ class ReprogrammingLayer(nn.Module):
         B, L, _ = target_embedding.shape
         S, _ = source_embedding.shape
         H = self.n_heads
-        print('target_embedding')
-        print(target_embedding.shape)
-        print('source_embedding')
-        print(source_embedding.shape)
-        print('BLHS')
-        print(B,L,H,S)
+
         target_embedding = self.query_projection(target_embedding).view(B, L, H, -1)
         source_embedding = self.key_projection(source_embedding).view(S, H, -1)
         value_embedding = self.value_projection(value_embedding).view(S, H, -1)

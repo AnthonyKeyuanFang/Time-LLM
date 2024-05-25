@@ -293,7 +293,10 @@ class ReprogrammingLayer(nn.Module):
         super(ReprogrammingLayer, self).__init__()
 
         d_keys = d_keys or (d_model // n_heads)
-
+        print('d_llm')
+        print(d_llm.shape)
+        print('d_keys * n_heads')
+        print((d_keys * n_heads).shape)
         self.query_projection = nn.Linear(d_model, d_keys * n_heads)
         self.key_projection = nn.Linear(d_llm, d_keys * n_heads)
         self.value_projection = nn.Linear(d_llm, d_keys * n_heads)

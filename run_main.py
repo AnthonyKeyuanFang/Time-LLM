@@ -230,7 +230,8 @@ for ii in range(args.itr):
                 scaler.step(model_optim)
                 scaler.update()
             else:
-                accelerator.backward(loss)
+                model.backward(loss)
+                #accelerator.backward(loss)
                 model_optim.step()
 
             if args.lradj == 'TST':

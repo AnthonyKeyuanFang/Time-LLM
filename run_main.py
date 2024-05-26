@@ -230,7 +230,7 @@ for ii in range(args.itr):
                 scaler.step(model_optim)
                 scaler.update()
             else:
-                model.backward(loss)
+                loss.backward()
                 #accelerator.backward(loss)
                 model_optim.step()
 
